@@ -1,0 +1,28 @@
+name: Configuration checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Neovim
+        run: |
+          curl --fail --location --retry 3 \
+            https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x86_64.tar.gz \
+            --output "$RUNNER_TEMP/nvim.tar.gz"
+          tar -xzf "$RUNNER_TEMP/nvim.tar.gz" -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/nvim-linux-x86_64/bin" >> "$GITHUB_PATH"
+      - name: Check Lua syntax and plugin lockfile
+        run: nvim --headless -u NONE -i NONE -l scripts/check-syntax.lua
+      - name: Check Python syntax
+        run: python3 -c 'import ast; from pathlib import Path; [ast.parse(p.read_text(), filename=str(p)) for p in Path("scripts").glob("*.py")]'
+      - name: Check whitespace
+        run: git diff --check "$(git hash-object -w -t tree /dev/null)" HEAD

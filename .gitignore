@@ -1,1 +1,38 @@
-*.md
+# Machine-specific configuration and assistant state
+/local.lua
+/.serena/
+/.vscode/
+/.idea/
+.env
+.env.*
+!.env.example
+
+# Local runtime data and backups
+/backups/
+/build/
+/lazy/
+/mason/
+/parser/
+/spell/
+/state/
+/cache/
+/sessions/
+/undo/
+/swap/
+/shada/
+Session.vim
+Session.vim.*
+*.log
+*.before-*
+*.bak
+*.save
+*.swp
+*.swo
+*~
+
+# Python and OS artifacts
+__pycache__/
+*.py[cod]
+.venv/
+.DS_Store
+Thumbs.db
