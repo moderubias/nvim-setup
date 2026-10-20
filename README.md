@@ -1,60 +1,61 @@
 # nvim-setup · Stemdark
 
-Личная конфигурация Neovim для разработки, текстов и исследований.
-lazy.nvim, нативный LSP, Blink completion, собственная монохромная тема
-с прозрачным фоном. Leader и local leader — **Пробел**.
+A personal Neovim configuration for development, writing, and research.
+lazy.nvim, native LSP, Blink completion, and a custom monochrome theme
+with a transparent background. Both leader keys are **Space**.
 
-- **Разработка:** Rust, Python, Java, C/C++, Lua, Bash, TypeScript и Astro.
-- **Инструменты:** Telescope, Neo-tree, Git, форматирование, DAP, Neotest и задачи проекта.
-- **Тексты:** VimTeX, Markdown, сниппеты, шаблоны заметок и режим письма.
-- **Исследования:** Jupyter через Molten, CSV, базы данных и изображения в Kitty.
+- **Development:** Rust, Python, Java, C/C++, Lua, Bash, TypeScript, and Astro.
+- **Tools:** Telescope, Neo-tree, Git, formatting, DAP, Neotest, and project tasks.
+- **Writing:** VimTeX, Markdown, snippets, note templates, and a focused writing mode.
+- **Research:** Jupyter through Molten, CSV tables, databases, and images in Kitty.
 
-[Использование и клавиши](docs/usage.md) ·
-[Кастомизация](docs/customization.md) ·
-[Проверки и работа с Git](docs/development.md)
+[Usage and keybindings](docs/usage.md) ·
+[Customization](docs/customization.md) ·
+[Development and publishing](docs/development.md)
 
-## Требования
+## Requirements
 
-Основная платформа — Linux. Проверено локально на **Neovim 0.12.6**.
-Нужен **Neovim 0.12+**: закреплённая версия
-[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) использует новый API.
-Java и просмотр PDF настроены под Linux; для другой ОС их потребуется адаптировать.
+The primary platform is Linux. Tested locally with **Neovim 0.12.6**.
+**Neovim 0.12+** is required by the pinned version of
+[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter).
+Java runtime discovery and PDF viewing are configured for Linux and need
+adjustments on other operating systems.
 
-Для установки плагинов, поиска и подсветки:
+For plugin installation, search, and syntax highlighting:
 
-| Зависимость | Назначение |
+| Dependency | Purpose |
 | --- | --- |
-| `git`, `curl`, `tar` | Загрузка плагинов и парсеров |
-| `cc`, `make` | Компиляция парсеров и расширения Telescope |
-| `tree-sitter` CLI **0.26.1+** | Сборка парсеров; устанавливать системным менеджером или Cargo, не npm |
-| `rg` (ripgrep), `fd` | Поиск по содержимому и файлам |
-| Node.js LTS и `npm` | Установка серверов и форматтеров через Mason |
-| Nerd Font | Иконки; шрифт нужно выбрать в настройках терминала |
-| `wl-clipboard` / `xclip` | Системный буфер обмена в Wayland / X11 |
+| `git`, `curl`, `tar` | Download plugins and parsers |
+| `cc`, `make` | Build parsers and the native Telescope extension |
+| `tree-sitter` CLI **0.26.1+** | Build parsers; install through a system package manager or Cargo, not npm |
+| `rg` (ripgrep), `fd` | Search file contents and names |
+| Node.js LTS and `npm` | Install language servers and formatters through Mason |
+| Nerd Font | Display icons; select the font in your terminal settings |
+| `wl-clipboard` / `xclip` | System clipboard on Wayland / X11 |
 
-Остальные зависимости нужны по мере использования:
+Install additional dependencies for the features you use:
 
-| Сценарий | Что установить |
+| Feature | Dependencies |
 | --- | --- |
-| Rust | Rust toolchain, Cargo, Clippy, rustfmt; rust-analyzer и codelldb — через Mason или отдельно |
-| Python | Python 3; pytest в окружении проекта для тестов, pytest-asyncio для асинхронных тестов |
-| Java / Android | JDK 21+ для JDTLS в `/usr/lib/jvm`, JDK проекта, Maven/Gradle или wrapper; Android SDK для APK |
-| LaTeX | TeX Live с XeLaTeX, latexmk, latexindent; Zathura для PDF |
+| Rust | Rust toolchain, Cargo, Clippy, rustfmt; rust-analyzer and codelldb through Mason or separately |
+| Python | Python 3; pytest in the project environment, plus pytest-asyncio for async tests |
+| Java / Android | JDK 21+ for JDTLS under `/usr/lib/jvm`, the project's JDK, Maven/Gradle or a wrapper; Android SDK for APK builds |
+| LaTeX | TeX Live with XeLaTeX, latexmk, latexindent; Zathura for PDF viewing |
 | Markdown preview | `glow` |
-| Jupyter | Python provider с `pynvim`, `jupyter_client`, Jupyter и зарегистрированный kernel |
-| Изображения | Kitty и ImageMagick (`magick`) |
-| Базы данных | CLI выбранной БД и локальные параметры подключения |
+| Jupyter | A Python provider with `pynvim`, `jupyter_client`, Jupyter, and a registered kernel |
+| Images | Kitty and ImageMagick (`magick`) |
+| Databases | The selected database's CLI and local connection settings |
 
-## Установка
+## Installation
 
-Сначала сохраните прежнюю конфигурацию. Если каталог уже существует:
+Back up your existing configuration first. If the directory exists:
 
 ```sh
 config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/nvim"
 mv "$config_dir" "${config_dir}.backup-$(date +%Y%m%d-%H%M%S)"
 ```
 
-Клонируйте репозиторий и запустите Neovim:
+Clone the repository and start Neovim:
 
 ```sh
 git clone https://github.com/moderubias/nvim-setup.git \
@@ -62,11 +63,10 @@ git clone https://github.com/moderubias/nvim-setup.git \
 nvim
 ```
 
-Для работы с репозиторием по SSH используйте
-`git@github.com:moderubias/nvim-setup.git` вместо HTTPS URL.
+For SSH access, use `git@github.com:moderubias/nvim-setup.git` instead of the HTTPS URL.
 
-При первом запуске lazy.nvim установится сам и начнёт загрузку плагинов.
-Дождитесь завершения установки и сборки. Затем выполните:
+On the first launch, lazy.nvim bootstraps itself and starts installing plugins.
+Wait for installation and builds to finish, then run:
 
 ```vim
 :Lazy restore
@@ -75,19 +75,19 @@ nvim
 :checkhealth config
 ```
 
-`Lazy restore` восстанавливает ревизии из `lazy-lock.json`. Парсеры устанавливаются
-асинхронно; дождитесь завершения и перезапустите Neovim.
-В Mason установите инструменты для нужных языков. Для установки всего
-настроенного набора используйте `:MasonToolsInstall` — список находится
-в [`lua/plugins/lsp.lua`](lua/plugins/lsp.lua). Автоматическая установка
-Mason-инструментов при открытии файла отключена.
+`Lazy restore` restores the revisions in `lazy-lock.json`. Parser installation
+is asynchronous; let it finish and restart Neovim.
+Use Mason to install tools for your languages. To install the entire configured
+set, run `:MasonToolsInstall`; the list lives in
+[`lua/plugins/lsp.lua`](lua/plugins/lsp.lua).
+Automatic Mason tool installation when opening files is disabled.
 
-Поиск файлов — `Ctrl+p`, поиск текста — `Ctrl+f`, дерево — `Ctrl+b`.
-Нажмите Пробел и подождите: Which-key покажет доступные сочетания.
+Find files with `Ctrl+p`, search text with `Ctrl+f`, and open the file tree
+with `Ctrl+b`. Press Space and pause to see available Which-key bindings.
 
-### Попробовать отдельно
+### Try it alongside your current setup
 
-Можно установить конфигурацию под другим именем, сохранив основной Neovim:
+Install under a separate application name:
 
 ```sh
 git clone https://github.com/moderubias/nvim-setup.git \
@@ -95,46 +95,46 @@ git clone https://github.com/moderubias/nvim-setup.git \
 NVIM_APPNAME=nvim-stemdark nvim
 ```
 
-Все последующие запуски этой копии выполняйте с `NVIM_APPNAME=nvim-stemdark`.
-Neovim выделит ей отдельные каталоги плагинов, состояния и кеша.
+Use `NVIM_APPNAME=nvim-stemdark` for every subsequent launch of this copy.
+Neovim gives it separate plugin, state, and cache directories.
 
-## Структура
+## Structure
 
 ```text
-init.lua                 Точка входа
+init.lua                 Entry point
 lua/
-  config/                Загрузка, параметры, клавиши, автокоманды, health
-  plugins/               Спецификации lazy.nvim по назначению
-  lsp/                   Общие LSP-настройки и подключение серверов
-  languages/             Python, Rust, Java и языковые расширения
-  features/              Задачи проекта и инструменты письма
-  ui/                    Буферы, statusline, иконки и Discord
-  theme/                 Палитра, токены и highlights Stemdark
-colors/                  Точка входа colorscheme
-ftplugin/                Настройки типов файлов
-after/                   Дополнения filetype и синтаксиса
-snippets/                LuaSnip-сниппеты Python и LaTeX
-scripts/                 Проверки синтаксиса, поведения и интерфейса
-docs/                    Использование, кастомизация и обслуживание
-local.example.lua        Пример персональных настроек
-lazy-lock.json           Закреплённые ревизии плагинов
+  config/                Startup, options, keybindings, autocmds, and health checks
+  plugins/               lazy.nvim specifications grouped by purpose
+  lsp/                   Shared LSP settings and server setup
+  languages/             Python, Rust, Java, and language-specific extensions
+  features/              Project tasks, snippets, and writing tools
+  ui/                    Buffers, statusline, icons, and Discord
+  theme/                 Stemdark palette, tokens, and highlights
+colors/                  Colorscheme entry point
+ftplugin/                Filetype settings
+after/                   Filetype and syntax extensions
+snippets/                Python and LaTeX LuaSnip snippets
+scripts/                 Syntax, behavior, and UI checks
+docs/                    Usage, customization, and maintenance guides
+local.example.lua        Example personal configuration
+lazy-lock.json           Pinned plugin revisions
 ```
 
-`config` управляет запуском, `plugins` описывает зависимости и их настройки,
-а собственное поведение вынесено в модули по назначению.
-Личные настройки находятся в игнорируемом `local.lua`:
+`config` controls startup, `plugins` describes dependencies and their settings,
+and custom behavior lives in modules organized by purpose.
+Keep personal settings in the ignored `local.lua` file:
 
 ```sh
 cd "${XDG_CONFIG_HOME:-$HOME/.config}/nvim"
 cp local.example.lua local.lua
 ```
 
-Подробнее о хуках загрузки, плагинах, теме и сниппетах —
-в [руководстве по кастомизации](docs/customization.md).
+See the [customization guide](docs/customization.md) for startup hooks, plugin
+overrides, themes, and snippets.
 
-## Обновление
+## Updates
 
-Получите изменения Git, восстановите версии плагинов и обновите парсеры:
+Pull configuration changes, restore plugin revisions, and update parsers:
 
 ```sh
 git pull --ff-only
@@ -145,13 +145,12 @@ git pull --ff-only
 :TSUpdate
 ```
 
-Если есть собственные изменения в отслеживаемых файлах, сначала сохраните их
-коммитом или через stash. `local.lua` не участвует в обновлениях.
-Для намеренного обновления самих плагинов используйте `:Lazy update`,
-проверьте конфигурацию и закоммитьте изменившийся `lazy-lock.json`.
-Подробнее о нём — в [документации lazy.nvim](https://lazy.folke.io/usage/lockfile).
+Commit or stash changes to tracked files before pulling. `local.lua` is not
+tracked. To update plugins intentionally, run `:Lazy update`, check the
+configuration, and commit the updated `lazy-lock.json`.
+See the [lazy.nvim lockfile documentation](https://lazy.folke.io/usage/lockfile).
 
-## Проверка и решение проблем
+## Health checks and troubleshooting
 
 ```vim
 :checkhealth config
@@ -160,22 +159,21 @@ git pull --ff-only
 :ConformInfo
 ```
 
-- **LSP не подключается:** проверьте сервер в `:Mason`, затем выполните
-  `:LspRefresh`. Для Rust — `:RustAnalyzer start`.
-- **Нет подсветки:** выполните `:TSInstallConfigured`; проверьте C-компилятор
-  и версию `tree-sitter`. LaTeX использует синтаксис VimTeX.
-- **Нет иконок:** выберите Nerd Font в терминале.
-- **Не работает clipboard:** установите `wl-clipboard` или `xclip`
-  и проверьте `:checkhealth vim.provider`.
-- **Jupyter не запускается:** проверьте Python provider, `jupyter_client`
-  и список kernels через `jupyter kernelspec list`.
-- **Не открывается PDF:** проверьте Zathura и журнал `:VimtexInfo`.
+- **LSP does not attach:** check the server in `:Mason`, then run `:LspRefresh`.
+  For Rust, use `:RustAnalyzer start`.
+- **Missing highlighting:** run `:TSInstallConfigured`; check your C compiler
+  and `tree-sitter` version. LaTeX uses VimTeX syntax highlighting.
+- **Missing icons:** select a Nerd Font in your terminal.
+- **Clipboard does not work:** install `wl-clipboard` or `xclip` and run
+  `:checkhealth vim.provider`.
+- **Jupyter does not start:** check the Python provider, `jupyter_client`, and
+  the output of `jupyter kernelspec list`.
+- **PDF does not open:** check Zathura and `:VimtexInfo`.
 
-Для проверки синтаксиса без установки плагинов из корня репозитория:
+Check syntax without installing plugins, from the repository root:
 
 ```sh
 nvim --headless -u NONE -i NONE -l scripts/check-syntax.lua
 ```
 
-Полные проверки и границы их покрытия описаны
-в [руководстве для разработки](docs/development.md).
+See the [development guide](docs/development.md) for the full checks and their coverage.

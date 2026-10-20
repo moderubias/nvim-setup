@@ -1,33 +1,33 @@
-# Отчёт QA
+# QA report
 
-[← README](../README.md) · [Как запустить проверки](development.md)
+[← README](../README.md) · [Running the checks](development.md)
 
-Проверено на Linux, Neovim 0.12.6, с ревизиями из `lazy-lock.json`.
+Tested on Linux with Neovim 0.12.6 and the revisions in `lazy-lock.json`.
 
-## Исправленные сценарии
+## Fixed regressions
 
-| Сценарий | Причина | Результат |
+| Scenario | Cause | Result |
 | --- | --- | --- |
-| Быстрое переключение после открытия файла | Навигация зависела от кеша последней отрисовки Bufferline | Shift+H / Shift+L используют актуальный список в порядке панели |
-| Закрытие текущего буфера | Следующим выбирался альтернативный буфер из истории | Выбирается сосед справа, у правого края — сосед слева |
-| Tab возвращает курсор в прежний сниппет | Проверка LuaSnip допускала прыжок к старому полю вне области сниппета | Проверяются текущий буфер, строка и столбец внутри области сниппета |
-| Старые поля после удаления текста | Очистка состояния не охватывала изменения в Insert | Состояние проверяется при перемещении и изменениях текста |
-| Rust derive completion | Имя модуля в спецификации не совпадало с новым путём | Провайдер загружается, предлагает Clone и исключает уже добавленный Debug |
-| Неполная внешняя палитра | Валидный JSON с отсутствующими цветами проходил загрузку | Токены проверяются, некорректная палитра заменяется встроенной |
+| Fast navigation after opening a file | Navigation relied on Bufferline's last rendered state | Shift+H / Shift+L use the current buffer list in panel order |
+| Closing the current buffer | The alternate buffer from navigation history was selected | Select the right neighbor, or the left neighbor at the right edge |
+| Tab returns to an old snippet | LuaSnip allowed jumping to a field outside the current snippet region | Check the current buffer, row, and column against the snippet region |
+| Old fields remain active after deletion | Session cleanup did not cover text changes in Insert mode | Check snippet state on cursor movement and text changes |
+| Rust derive completion | The provider's configured module name did not match its new path | Load the provider, suggest Clone, and exclude an existing Debug derive |
+| Incomplete external palette | Valid JSON with missing colors passed loading | Validate tokens and fall back to the built-in palette |
 
-## Результаты
+## Results
 
-- **47 Lua-файлов:** синтаксис, ссылки на локальные модули и структура lockfile.
-- **12 проверок конфигурации:** вкладки при resize, защита изменённых буферов,
-  проекты и задачи, окружение Python, палитра, модули completion, health,
-  терминал проекта, языковые плагины, LSP, шаблоны и асинхронные ошибки.
-- **27 проверок UI:** регистры и clipboard, undo/repeat, мышь, закрытие буферов,
-  переходы до перерисовки и через край списка, вкладки Neovim, Tab/Shift+Tab,
-  удалённые сниппеты, смена буфера, Rust completion и Markdown.
-- StyLua, синтаксис Python, локальные ссылки документации и пробельные ошибки.
+- **47 Lua files:** syntax, local module references, and lockfile structure.
+- **12 configuration checks:** resize behavior, modified-buffer protection,
+  projects and tasks, Python environments, palettes, completion modules, health,
+  project terminals, language plugins, LSP, templates, and asynchronous errors.
+- **27 UI checks:** registers and clipboard, undo/repeat, mouse input, buffer
+  closing, navigation before redraw and across list boundaries, tabpages,
+  Tab/Shift+Tab, deleted snippets, buffer switches, Rust completion, and Markdown.
+- StyLua, Python syntax, local documentation links, and whitespace checks.
 
-Все перечисленные проверки проходят. Регрессии добавлены в `scripts/check.lua`,
-`scripts/check-ui.py` и `scripts/check-syntax.lua`.
+All listed checks pass. Regression coverage lives in `scripts/check.lua`,
+`scripts/check-ui.py`, and `scripts/check-syntax.lua`.
 
-Внешние GUI-приложения, Discord, реальные Jupyter kernels, PDF/SyncTeX,
-Android SDK и отладка конкретных проектов не входят в этот автоматический прогон.
+External GUI applications, Discord, live Jupyter kernels, PDF/SyncTeX,
+the Android SDK, and debugging individual projects are outside this automated run.

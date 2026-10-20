@@ -336,12 +336,12 @@ def no_async_errors():
 
 def markdown_appearance():
     nvim.command("enew!")
-    nvim.current.buffer[:] = ["# Проверка", "", "```bash", "./launch.sh check", "```", ""] + ["Обычный русский текст."] * 12
+    nvim.current.buffer[:] = ["# Preview check", "", "```bash", "./launch.sh check", "```", ""] + ["Plain Unicode text: café, naïve, λ."] * 12
     nvim.command("setfiletype markdown")
     nvim.current.window.cursor = (15, 0)
     time.sleep(0.5)
     settle()
-    assert not nvim.current.window.options["spell"], "English spell checker is enabled for Russian text"
+    assert not nvim.current.window.options["spell"], "Spell checking is unexpectedly enabled for prose"
     marks = nvim.exec_lua('local ns=vim.api.nvim_get_namespaces()["render-markdown.nvim"]; return vim.api.nvim_buf_get_extmarks(0,ns,0,-1,{details=true})')
     assert marks, "Markdown did not render"
     for mark in marks:

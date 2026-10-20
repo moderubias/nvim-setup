@@ -6,21 +6,21 @@ end
 
 add(
   "xedoc",
-  "XeLaTeX document · Russian and English",
+  "XeLaTeX document · English and Russian",
   [=[
 % !TeX program = xelatex
 \documentclass[12pt,a4paper]{article}
 \usepackage{fontspec}
 \setmainfont{Libertinus Serif}
 \usepackage{polyglossia}
-\setdefaultlanguage{russian}
-\setotherlanguage{english}
+\setdefaultlanguage{english}
+\setotherlanguage{russian}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx,booktabs,microtype}
 \usepackage[margin=25mm]{geometry}
 \usepackage[hidelinks]{hyperref}
-\title{${1:Название}}
-\author{${2:Автор}}
+\title{${1:Title}}
+\author{${2:Author}}
 \date{\today}
 
 \begin{document}

@@ -1,86 +1,86 @@
-# Разработка и публикация
+# Development and publishing
 
 [← README](../README.md)
 
-## Проверки
+## Checks
 
-Команды выполняются из корня репозитория.
-[Результаты последнего QA и исправленные сценарии](qa.md).
+Run commands from the repository root.
+See the [QA results and regression scenarios](qa.md).
 
-Проверка Lua и `lazy-lock.json` без загрузки конфигурации и плагинов:
+Check Lua and `lazy-lock.json` without loading the configuration or plugins:
 
 ```sh
 nvim --headless -u NONE -i NONE -l scripts/check-syntax.lua
 ```
 
-Проверка поведения с установленными плагинами и Python 3:
+Run behavior checks with the plugins installed and Python 3 available:
 
 ```sh
 nvim --headless -i NONE '+lua dofile("scripts/check.lua")'
 ```
 
-Проверяются синтаксис, вкладки, закрытие буферов, корни проектов, задачи,
-выбор Python, загрузка языковых плагинов, LSP и шаблоны заметок.
-Проверка открывает временные языковые буферы; доступные LSP могут запускаться.
+These cover syntax, tabpages, buffer closing, project roots and tasks, Python
+interpreter selection, language plugins, LSP, and note templates.
+The checks open temporary language buffers, so available LSP servers may start.
 
-Проверка клавиатуры и интерфейса требует Python-пакет `pynvim`:
+Keyboard and UI checks require the Python `pynvim` package:
 
 ```sh
 python3 scripts/check-ui.py
 ```
 
-Скрипт подключает виртуальный UI через Neovim RPC, подменяет clipboard тестовым
-провайдером и проверяет регистры, копирование, удаление, вставку, undo/repeat,
-закрытие буферов мышью и командами, переходы до перерисовки, вкладки Neovim,
-Tab/Shift+Tab внутри и вне сниппетов, Rust completion и оформление Markdown.
-Ошибки асинхронных уведомлений также приводят к провалу проверки.
+The script attaches a virtual UI through Neovim RPC and uses a test clipboard
+provider. It checks registers, copy/delete/paste, undo/repeat, mouse and command
+buffer closing, navigation before redraw, tabpages, Tab/Shift+Tab inside and
+outside snippets, Rust completion, and Markdown rendering.
+Asynchronous error notifications also fail the check.
 
-PDF/SyncTeX, Kitty, Discord, Jupyter, реальные проекты и отладочные сессии
-нужно проверять отдельно. GitHub Actions выполняет только проверку синтаксиса
-Lua/Python, локальных ссылок на модули, структуры lockfile и пробельных ошибок: для неё не нужны плагины,
-Mason, графическая сессия или персональные файлы.
+PDF/SyncTeX, Kitty, Discord, Jupyter, real projects, and debugging sessions need
+separate testing. GitHub Actions checks Lua/Python syntax, local module
+references, the lockfile structure, and whitespace. It does not require plugins,
+Mason, a graphical session, or personal configuration files.
 
-## Стиль
+## Style
 
-Lua форматируется StyLua по `.stylua.toml`; общие отступы и окончания строк
-описаны в `.editorconfig` и `.gitattributes`.
+Format Lua with StyLua using `.stylua.toml`. General indentation and line ending
+rules are defined in `.editorconfig` and `.gitattributes`.
 
 ```sh
 stylua --check init.lua local.example.lua lua colors ftplugin after snippets scripts
 git diff --check
 ```
 
-Для форматирования выполните ту же команду StyLua без `--check`.
-Собственные языковые функции держите в `lua/languages/`, интерфейс —
-в `lua/ui/`, поведение проекта — в `lua/features/`. В plugin spec оставляйте
-условия загрузки, зависимости и параметры самого плагина.
+Remove `--check` from the StyLua command to apply formatting.
+Keep language behavior in `lua/languages/`, UI code in `lua/ui/`, and project
+features in `lua/features/`. Plugin specifications should describe loading
+conditions, dependencies, and plugin settings.
 
-## Что хранится в Git
+## Tracked files
 
-- Конфигурация, сниппеты, документация, примеры и проверки.
-- `lazy-lock.json`: ревизии плагинов нужны для воспроизводимой установки.
-- `.github/workflows/check.yml`: проверки при push и pull request.
+- Configuration, snippets, documentation, examples, and checks.
+- `lazy-lock.json`, which pins plugin revisions for reproducible installation.
+- `.github/workflows/check.yml`, which runs checks on pushes and pull requests.
 
-В `.gitignore` исключены `local.lua`, `.env`, данные Serena и IDE,
-кеши, сессии, словари, временные файлы и резервные копии. Они могут оставаться
-на компьютере, но не должны попадать в коммит. Neovim обычно хранит плагины,
-Mason, undo, ShaDa и кеши за пределами конфигурации — в `stdpath("data")`,
-`stdpath("state")` и `stdpath("cache")`.
+`.gitignore` excludes `local.lua`, `.env`, Serena and IDE state, caches,
+sessions, dictionaries, temporary files, and backups. These may remain on your
+machine without entering commits. Neovim normally stores plugins, Mason, undo,
+ShaDa, and caches outside the configuration directory, under `stdpath("data")`,
+`stdpath("state")`, and `stdpath("cache")`.
 
-Посмотреть реальные пути:
+Inspect the actual paths:
 
 ```vim
 :lua for _, key in ipairs({"config", "data", "state", "cache"}) do print(key, vim.fn.stdpath(key)) end
 ```
 
-Игнорирование не удаляет файлы из старых коммитов. Устаревшие модули
-`lua/user/`, Packer и резервные `*.save` / `*.bak` не нужны в новой структуре;
-их удаление должно войти в следующий коммит вместе с новыми модулями.
+Ignoring files does not remove them from earlier commits. Legacy `lua/user/`
+modules, Packer output, and `*.save` / `*.bak` backups have been removed from the
+current tree; older versions remain in Git history.
 
-## Публикация
+## Publishing
 
-Целевой репозиторий: [moderubias/nvim-setup](https://github.com/moderubias/nvim-setup).
-Настроенный remote должен совпадать с ним:
+The target repository is [moderubias/nvim-setup](https://github.com/moderubias/nvim-setup).
+Verify the remote and review your changes:
 
 ```sh
 git remote -v
@@ -88,15 +88,15 @@ git status --short
 git diff --check
 ```
 
-После проверки изменений:
+After running the checks:
 
 ```sh
 git add -A
 git diff --cached --stat
 git diff --cached --check
-git commit -m "Organize Neovim configuration and document setup"
+git commit -m "Update Neovim configuration"
 git push -u origin main
 ```
 
-`git add -A` включает удаления прежних файлов и соблюдает `.gitignore`.
-Проверьте подготовленный коммит перед публикацией.
+`git add -A` includes file deletions and respects `.gitignore`.
+Review the staged changes before publishing.
